@@ -3,16 +3,19 @@ import express from "express";
 const app = express();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+const wiseSayings = [
+  {
+    content: "나는 의적이다.",
+    author: "홍길동",
+  },
+  {
+    content: "나는 산적이다.",
+    author: "임꺽정",
+  },
+];
 
-app.get("/about", (req, res) => {
-  res.send("About!");
-});
-
-app.get("/setting", (req, res) => {
-  res.send("Setting!");
+app.get("/wise-sayings", (req, res) => {
+  res.json(wiseSayings);
 });
 
 app.listen(port, () => {
