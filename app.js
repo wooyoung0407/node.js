@@ -15,17 +15,6 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-const wiseSayings = [
-  {
-    content: "나는 의적이다.",
-    author: "홍길동",
-  },
-  {
-    content: "나는 산적이다.",
-    author: "임꺽정",
-  },
-];
-
 app.get("/wise-sayings", async (req, res) => {
   const [rows] = await pool.query("SELECT * FROM wise_saying ORDER BY id DESC");
 
@@ -37,14 +26,14 @@ app.post("/wise-sayings", async (req, res) => {
 
   if (!author) {
     res.status(400).json({
-      msg: "author required",
+      msg: "작가가 없습니다. 실패 ",
     });
     return;
   }
 
   if (!content) {
     res.status(400).json({
-      msg: "content required",
+      msg: "내용이 없습니다. 실패",
     });
     return;
   }
@@ -61,6 +50,7 @@ app.post("/wise-sayings", async (req, res) => {
 
   res.status(201).json({
     id: rs.insertId,
+    msg : `${id}번을 생성하였습니다.`
   });
 });
 
@@ -74,20 +64,20 @@ app.patch("/wise-sayings/:id", async (req, res) => {
   ]);
 
   if (rows.length == 0) {
-    res.status(404).send("not found");
+    res.status(404).send("없음");
     return;
   }
 
   if (!author) {
     res.status(400).json({
-      msg: "author required",
+      msg: "작가 없습니다. 업데이트실패",
     });
     return;
   }
 
   if (!content) {
     res.status(400).json({
-      msg: "content required",
+      msg: "내용 없습니다. 업데이트실패",
     });
     return;
   }
@@ -103,9 +93,9 @@ app.patch("/wise-sayings/:id", async (req, res) => {
   );
 
   res.status(200).json({
-    id,
     author,
     content,
+    msg : `${id}를 수정하였습니다.`
   });
 });
 
@@ -117,7 +107,7 @@ app.delete("/wise-sayings/:id", async (req, res) => {
   ]);
 
   if (rows.length == 0) {
-    res.status(404).send("not found");
+    res.status(404).send("없음");
     return;
   }
 
@@ -130,7 +120,7 @@ app.delete("/wise-sayings/:id", async (req, res) => {
   );
 
   res.status(200).json({
-    id,
+    msg : `${id}번을 삭제하였습니다.`
   });
 });
 
